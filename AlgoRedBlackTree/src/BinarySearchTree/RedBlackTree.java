@@ -29,9 +29,10 @@ public class RedBlackTree<T extends Comparable<T>> {
 	 */
 	public void insert(T value){
 		Node node = new Node(value); // Create the Node to add
-		node.isRed = true;
+		
 		//Special case that cannot be handled recursively
-		if ( root == null ) {
+		if ( root == null )
+		{
 			root = node;
 			
 			//part 3 update
@@ -56,7 +57,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 	 */
 	protected void insertRec(Node subTreeRoot, Node node)
 	{
-
+		node.isRed = true;
 		//Note the call to the compareTo() method. This is only possible if our objects implement
 		//the Comparable interface.
 		if ( node.value.compareTo(subTreeRoot.value) < 0)
@@ -90,6 +91,9 @@ public class RedBlackTree<T extends Comparable<T>> {
 				subTreeRoot.right = node;
 				//part 3, assigning parent
 				node.parent = subTreeRoot;
+				
+				//something about this breaks the graph view after rotation
+				//handleRedBlack(node);
 				return;
 			}
 			else
@@ -204,6 +208,23 @@ public class RedBlackTree<T extends Comparable<T>> {
 		}
       
 	}
+	//find max
+	public T findMax()
+	{
+		return recFindMinimum(root);
+	}
+	
+	private T recFindMax (Node subTreeRoot)
+	{
+		if ( subTreeRoot.right == null ){
+			return subTreeRoot.value; 
+		}
+		else
+		{ 
+			return recFindMax(subTreeRoot.right);
+		}
+      
+	}
 	
 	//practical 1, find a val in the tree
 	
@@ -260,8 +281,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 		grandparent.right = null;
 		
 		insertRec(parent, grandparent);
-		
 		return parent;
+		
 	}
 	
 	//practical 2, rotate right
@@ -301,7 +322,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 		System.out.println("Entered handle redblack, val = " + newNode.value);
 		
 		//make sure the new node is red
-		newNode.isRed = true;
+		//newNode.isRed = true;
 		
 		//if the node is root, set black and exit
 		if(newNode == root)
@@ -330,6 +351,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 		if (grandParent != null)
 			System.out.println("Grandparent is " + grandParent.value);
 		
+		
+		
 		//checking for and handling red uncle violations
 		if(parentNode.isRed && grandParent != null) 
 		{
@@ -341,7 +364,7 @@ public class RedBlackTree<T extends Comparable<T>> {
 				parentNode.isRed = false;
 				grandParent.isRed = true;
 				handleRedBlack(grandParent);
-				return;
+				
 			}
 			
 		}
@@ -379,8 +402,18 @@ public class RedBlackTree<T extends Comparable<T>> {
 		
 		}
 		
-		//set the root to black
-		root.isRed = false;
+		//make sure i am black if parent is red
+		if(parentNode.isRed && newNode.isRed)
+		{
+			newNode.isRed = false;
+		}
+		
+		//make sure i am red if parent is black
+		if(parentNode.isRed == false && newNode.isRed == false)
+		{
+			newNode.isRed = true;
+		}
+		
 	}
 	
 	//part 3, finding uncles
@@ -450,12 +483,14 @@ public class RedBlackTree<T extends Comparable<T>> {
 		Node parent = target.parent;
 		Node grandparent = parent.parent;
 		Node greatGrandparent = grandparent.parent;
-		
+		boolean gRed = grandparent.isRed;
+		boolean pRed = parent.isRed;
 		if(greatGrandparent == null)
 		{
 			//Is a root swap
 			parent.parent = null;
 			root = rotateSubTreeRight(grandparent);
+			root.isRed = false;
 		}
 		else
 		{
@@ -465,6 +500,8 @@ public class RedBlackTree<T extends Comparable<T>> {
 		
 		//call handle red black to adjust colours
 		handleRedBlack(grandparent);
+		parent.isRed = gRed;
+		grandparent.isRed = pRed;
 	}
 	
 	public void applyRightRightCase(Node target)
@@ -472,21 +509,28 @@ public class RedBlackTree<T extends Comparable<T>> {
 		Node parent = target.parent;
 		Node grandparent = parent.parent;
 		Node greatGrandparent = grandparent.parent;
+		boolean gRed = grandparent.isRed;
+		boolean pRed = parent.isRed;
 		
 		if(greatGrandparent == null)
 		{
 			//Is a root swap
 			parent.parent = null;
 			root = rotateSubTreeLeft(grandparent);
+			root.isRed = false;
+			
 		}
 		else
 		{
 			//Subtree rotation
 			greatGrandparent.right = rotateSubTreeLeft(grandparent);
+			
 		}
 		
 		//call handle red black to adjust colours
+		
 		handleRedBlack(grandparent);
+		
 	}
 	
 	//part 5

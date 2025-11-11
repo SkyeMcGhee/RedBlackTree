@@ -21,7 +21,7 @@ public class BinaryTreeTester1 {
 		myTree.insert(75);
 		myTree.insert(55);*/
 		
-		RedBlackTree<String> myTreeString = new RedBlackTree<String>();
+		/*RedBlackTree<String> myTreeString = new RedBlackTree<String>();
 		myTreeString.insert("adc");
 		myTreeString.insert("qwe");
 		myTreeString.insert("wer");
@@ -80,27 +80,41 @@ public class BinaryTreeTester1 {
 		 myTree.preOrderTraversal();*/
 		 
 		 //practical 3 tester
-		 RedBlackTree<Integer> myColorTree = new RedBlackTree<Integer>();
+		 //RedBlackTree<Integer> myColorTree = new RedBlackTree<Integer>();
 		 
-		 myColorTree.insert(10);
-		 myColorTree.insert(5);
-		 myColorTree.insert(15);
-		 myColorTree.insert(20);
+		 //myColorTree.insert(10);
+		 //myColorTree.insert(5);
+		 //myColorTree.insert(15);
+		 //myColorTree.insert(20);
 		 
-		 System.out.println("Color results:");
-		 myColorTree.preOrderTraversal();
+		 //System.out.println("Color results:");
+		 //myColorTree.preOrderTraversal();
 		 
 		//practical 4 tester
 		 
 		 RedBlackTree<Integer> myCaseTree = new RedBlackTree<Integer>();
 		 
-		 myCaseTree.insert(1);
-		 myCaseTree.insert(2);
-		 myCaseTree.insert(3);
+		 myCaseTree.insert(8);
+		 myCaseTree.insert(18);
+		 myCaseTree.insert(5);
+		 myCaseTree.insert(15);
+		 myCaseTree.insert(17);
+		 myCaseTree.insert(25);
+		 myCaseTree.insert(40);
+		 myCaseTree.insert(80);
 		 
+		
 		 System.out.println("Right Right case results:");
 		 myCaseTree.preOrderTraversal();
 		 
+		 //general testers
+		myCaseTree.inOrderTraversal();
+		myCaseTree.preOrderTraversal();
+		myCaseTree.postOrderTraversal();
+		
+		myCaseTree.find(8);
+		myCaseTree.findMinimum();
+		myCaseTree.findMax();
 		 
 	}
 
